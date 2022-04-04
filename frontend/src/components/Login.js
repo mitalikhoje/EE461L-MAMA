@@ -13,6 +13,7 @@ import NavbarComp from './NavbarComp';
 export default function Login(props) {
     const  [username, setUsername] = useState('')
     const  [password, setPassword] = useState('')
+    const  [errorMsg, setErrorMsg] = useState('')
     const [res, setRes] = useState({})
 
     const history = useHistory();
@@ -46,7 +47,9 @@ export default function Login(props) {
                 state: info
             })
         }
-        // add else for incorrect login w/ error material ui input text
+        else {
+            setErrorMsg("Incorrect username or password")
+        }
         
     }
 
@@ -70,6 +73,9 @@ export default function Login(props) {
                     onChange={(e)=>setPassword(e.target.value)}
                     >
                     </input>
+                </div>
+                <div>
+                    <p style={{color: 'red'}}>{errorMsg}</p>
                 </div>
                 <button>LOGIN</button>
                 <div><Link to="/register">Don't have an account?</Link></div>
