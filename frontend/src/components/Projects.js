@@ -60,8 +60,6 @@ export default function Projects(props) {
     },
     body:JSON.stringify(body)
     })
-    const json = await response.json();
-    setProjects(json)
   }
 
   async function handleExistProject(body) {

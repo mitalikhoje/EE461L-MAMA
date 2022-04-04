@@ -62,23 +62,9 @@ def validateUser():
 @app.route('/add-project', methods=["POST"])
 def addProject():
     app.logger.info(request.json)
-    username = request.json['username']
     projName = request.json['projName']
     description = request.json['description']
     projId = request.json['projId']
-
-    query = {'username': username}
-    doc = usersCol.find_one(query)
-    projects = doc['projects']
-    project = {
-        'project_name': projName,
-        'project_description': description,
-        'project_id': projId
-    }
-    projects.append(project)
-    new_val = {'$set': {'projects': projects}}
-
-    usersCol.update_one(query, new_val)
 
     projectsCol.insert_one({
         'project_name': projName,
@@ -88,7 +74,7 @@ def addProject():
         'hw2_checked_out': 0
     })
 
-    return jsonify(projects)
+    return ('', 204)
 
 @app.route('/add-existing-project', methods=["POST"])
 def addExistingProject():
