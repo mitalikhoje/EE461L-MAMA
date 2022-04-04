@@ -19,6 +19,18 @@ projectsCol = db['projects'] # projects collections
 
 CORS(app)
 
+def customEncrypt(inputText, N, D):
+    inputText = inputText[::-1]
+
+    encryptedText = ""
+    for c in inputText:
+        if D == 1:
+            encryptedText += chr((ord(c) - 34 + N) % 93 + 34)
+        else:
+            encryptedText += chr((ord(c) - 34 - N) % 93 + 34)
+
+    return encryptedText
+
 @app.route('/add-user', methods=["POST"])
 def addUser():
     app.logger.info(request.json)
@@ -26,6 +38,7 @@ def addUser():
     lName = request.json['lName']
     username = request.json['username']
     password = request.json['password']
+    password = customEncrypt(password, 5, 1)
 
     query = {'username': username}
     if usersCol.count_documents(query) == 1:
@@ -47,10 +60,12 @@ def validateUser():
     app.logger.info(request.json)
     username = request.json['username']
     password = request.json['password']
+    password = customEncrypt(password, 5, 1)
     query = {
         'username':username,
         'password':password
     }
+    app.logger.info(password)
 
     hw = list(hwCol.find({}))
     hwSet1 = json.loads(json_util.dumps(hw[0]))
@@ -59,6 +74,7 @@ def validateUser():
 
     if usersCol.count_documents(query) == 1:
         doc = usersCol.find_one({'username':username})
+
         return jsonify(1, username, doc['projects'],
          hwSet1['available'], hwSet2['available'],
          hwSet1['capacity'], hwSet2['capacity']
