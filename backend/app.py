@@ -175,6 +175,31 @@ def updateHWSet():
 
         return jsonify(hwSet, available, checked_out)
 
+@app.route('/get-hw-availability', methods=["GET"])
+def getHWAvailability():  
+    hw1doc = hwCol.find_one({'name': 'HWSet1'})
+    hw1Available = hw1doc['available']
+
+    hw2doc = hwCol.find_one({'name': 'HWSet2'})
+    hw2Available = hw2doc['available']
+
+    return jsonify(hw1Available, hw2Available)
+
+@app.route('/get-projects-info', methods=["POST"])
+def getProjectsInfo():
+    app.logger.info(request.json)
+    username = request.json['username']
+
+    hw = list(hwCol.find({}))
+    hwSet1 = json.loads(json_util.dumps(hw[0]))
+    app.logger.info(hwSet1['available'])
+    hwSet2 = json.loads(json_util.dumps(hw[1]))
+
+    doc = usersCol.find_one({'username':username})
+    return jsonify(username, doc['projects'],
+         hwSet1['available'], hwSet2['available'],
+         hwSet1['capacity'], hwSet2['capacity']
+    )
 
 
 if __name__ == '__main__':

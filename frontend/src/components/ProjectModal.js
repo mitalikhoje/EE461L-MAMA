@@ -27,18 +27,13 @@ export default function ProjectModal(props) {
     const  [checkType, setCheckType] = useState('')
     
     const  [hw1CheckedOut, setHw1CheckedOut] = useState(props.hw1CheckedOut)
+    const  [hw2CheckedOut, setHw2CheckedOut] = useState(props.hw2CheckedOut)
     useEffect(() => {
       console.log("useEffect1 called");
       setHw1CheckedOut(props.hw1CheckedOut);
- 
-    }, [props.hw1CheckedOut]);
-
-    const  [hw2CheckedOut, setHw2CheckedOut] = useState(props.hw2CheckedOut)
-    useEffect(() => {
-      console.log("useEffect2 called");
       setHw2CheckedOut(props.hw2CheckedOut);
  
-    }, [props.hw2CheckedOut]);
+    }, [props.hw1CheckedOut, props.hw2CheckedOut]);
 
     const  [HWSet1Avail, setHWSet1Avail] = useState(props.HWSet1Avail)
     const  [HWSet2Avail, setHWSet2Avail] = useState(props.HWSet2Avail)

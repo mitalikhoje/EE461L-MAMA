@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,6 +25,7 @@ import TextField from '@mui/material/TextField';
 import { Modal } from 'react-bootstrap'
 
 export default function Projects(props) {
+  
   const location = useLocation()
   const username = location.state[0]
 
@@ -125,9 +126,25 @@ export default function Projects(props) {
     setHw2CheckedOut(json)
   }
 
+  function getAvailability() {
+    handleAvailability()
+  }
+
+  async function handleAvailability() {
+    const response = await fetch('/get-hw-availability',{
+      'method':'GET',
+       headers : {
+        'Content-Type':'application/json'
+       }
+    })
+    const json = await response.json();
+    setHWSet1Avail(json[0])
+    setHWSet2Avail(json[1])
+  }
+
   return (
     <div>
-      <NavbarComp2 name={username}/>
+      <NavbarComp2 username={username}/>
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <Card sx={{ maxWidth: 345 }}>
@@ -205,7 +222,7 @@ export default function Projects(props) {
                           >OPEN</Button>
                         <ProjectModal
                           show={modalShow}
-                          onHide={() => setModalShow(false)} // update hw set info
+                          onHide={() => {setModalShow(false); getAvailability();}} // update hw set info
                           projName={projName}
                           projId={projId}
                           hw1CheckedOut={hw1CheckedOut}
