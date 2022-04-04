@@ -8,12 +8,15 @@ import {
 } from "react-router-dom";
 import { useState } from 'react'
 import NavbarComp from './NavbarComp'
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 export default function Register() {
     const  [fName, setFName] = useState('')
     const  [lName, setLName] = useState('')
     const  [username, setUsername] = useState('')
     const  [password, setPassword] = useState('')
+    const  [userExists, setUserExists] = useState('')
 
     const history = useHistory();
 
@@ -21,16 +24,23 @@ export default function Register() {
         handleRegister({fName, lName, username, password})
     }
 
-    function handleRegister(body){
-        fetch('/add-user',{
-            'method':'POST',
-             headers : {
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify(body)
-        })
-
-        history.push('/login')
+    async function handleRegister(body){
+        const response = await fetch('/add-user', {
+            'method': 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        const json = await response.json()
+        
+        if(json) {
+            history.push('/login')
+        }
+        else {
+            setUserExists('Username already exists')
+        }
+        
     }
 
     function handleSubmit(event) {
@@ -42,45 +52,52 @@ export default function Register() {
         setUsername('')
         setPassword('')
     }
- // handle if username already exists
+
   return (
             <div>
                 <NavbarComp />
-                <form onSubmit={handleSubmit}>
+                <form style={{marginTop: '10%', marginLeft: '40%'}} onSubmit={handleSubmit}>
+                    <h3>REGISTER</h3>
                     <div>
-                        <input
-                        name="fName"
-                        placeholder="First Name"
+                        <TextField 
+                        id="outlined-basic" 
+                        label="First Name" 
+                        variant="outlined" 
                         onChange={(e)=>setFName(e.target.value)}
-                        >
-                        </input>
+                        style={{marginBottom: '10px'}}
+                        />
                     </div>
                     <div>
-                        <input
-                        name="lName"
-                        placeholder="Last Name"
+                        <TextField 
+                        id="outlined-basic" 
+                        label="Last Name" 
+                        variant="outlined" 
                         onChange={(e)=>setLName(e.target.value)}
-                        >
-                        </input>
+                        style={{marginBottom: '10px'}}
+                        />
                     </div>
                     <div>
-                        <input
-                        name="username"
-                        placeholder="Username"
+                        <TextField 
+                        id="outlined-basic" 
+                        label="Username" 
+                        variant="outlined" 
                         onChange={(e)=>setUsername(e.target.value)}
-                        >
-                        </input>
+                        style={{marginBottom: '10px'}}
+                        />
                     </div>
                     <div>
-                        <input
-                        name="password"
-                        placeholder="Password"
+                        <TextField 
+                        id="outlined-basic" 
+                        label="Password" 
+                        variant="outlined" 
                         onChange={(e)=>setPassword(e.target.value)}
-                        type="password"
-                        >
-                        </input>
+                        style={{marginBottom: '10px'}}
+                        />
                     </div>
-                    <button>REGISTER</button>
+                    <div>
+                        <p style={{color: 'red'}}>{userExists}</p>
+                    </div>
+                    <Button type="submit" variant="contained" color="secondary">REGISTER</Button>
                 </form>
             </div>
         )

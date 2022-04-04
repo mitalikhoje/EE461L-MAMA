@@ -26,14 +26,21 @@ def addUser():
     lName = request.json['lName']
     username = request.json['username']
     password = request.json['password']
-    # encrypt username and password
-    usersCol.insert_one({
-        'first_name': fName,
-        'last_name': lName,
-        'username': username,
-        'password': password,
-        'projects': []
-    })
+
+    query = {'username': username}
+    if usersCol.count_documents(query) == 1:
+        return jsonify(0)
+    else:
+        # encrypt username and password
+        usersCol.insert_one({
+            'first_name': fName,
+            'last_name': lName,
+            'username': username,
+            'password': password,
+            'projects': []
+        })
+
+        return jsonify(1)
 
 @app.route('/validate-account', methods=["POST"])
 def validateUser():
