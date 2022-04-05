@@ -120,7 +120,6 @@ export default function Projects(props) {
     body:JSON.stringify(body)
     })
     const json = await response.json();
-    console.log(json)
     setHw2CheckedOut(json)
   }
 
@@ -143,7 +142,7 @@ export default function Projects(props) {
   return (
     <div>
       <NavbarComp2 username={username}/>
-      <Grid container spacing={2}>
+      <Grid style={{marginTop: '10px', marginLeft: '10px'}} container spacing={2}>
         <Grid item xs={3}>
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
@@ -156,24 +155,27 @@ export default function Projects(props) {
                   label="Name" 
                   variant="outlined" 
                   onChange={(e)=>setProjName(e.target.value)}
+                  style={{marginBottom: '10px'}}
                 />
                 <TextField 
                   id="outlined-basic" 
                   label="ID" 
                   variant="outlined" 
                   onChange={(e)=>setProjId(e.target.value)}
+                  style={{marginBottom: '10px'}}
                 />
                 <TextField 
                   id="outlined-basic" 
                   label="Description" 
                   variant="outlined" 
                   onChange={(e)=>setDescription(e.target.value)}
+                  style={{marginBottom: '10px'}}
                 />
                 <div><Button type="submit" variant="contained" color="secondary">+</Button></div>
               </form>
             </CardContent>
           </Card>
-          <Card sx={{ maxWidth: 345 }}>
+          <Card style={{marginTop: '15px'}} sx={{ maxWidth: 345 }}>
             <CardHeader
               title="Add Existing Project"
             />
@@ -184,6 +186,7 @@ export default function Projects(props) {
                   label="ID" 
                   variant="outlined" 
                   onChange={(e)=>setProjId(e.target.value)}
+                  style={{marginBottom: '10px'}}
                 />
                 <div><Button type="submit" variant="contained" color="secondary">+</Button></div>
               </form>
@@ -235,7 +238,7 @@ export default function Projects(props) {
             </Table>
           </TableContainer>
 
-          <h2>Hardware Sets</h2>
+          <h2 style={{marginTop: '10px'}}>Hardware Sets</h2>
           <TableContainer component={Paper}>
             <Table sx={{ width: 600, maxWidth: '100%' }} aria-label="simple table">
               <TableHead>

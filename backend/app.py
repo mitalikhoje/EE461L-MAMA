@@ -65,7 +65,6 @@ def validateUser():
         'username':username,
         'password':password
     }
-    app.logger.info(password)
 
     hw = list(hwCol.find({}))
     hwSet1 = json.loads(json_util.dumps(hw[0]))
@@ -167,7 +166,7 @@ def updateHWSet():
     if((checkType == "check in" and quantity > checked_out) or 
         (checkType == "check out" and quantity > available)):
         app.logger.info("ERROR")
-        return 0
+        return jsonify(0)
     else:
         if(checkType == "check in"):
             available += quantity
@@ -182,7 +181,7 @@ def updateHWSet():
         else:
             projectsCol.update_one(query, {'$set': {'hw2_checked_out': checked_out}})
 
-        return jsonify(hwSet, available, checked_out)
+        return jsonify(1, hwSet, available, checked_out)
 
 @app.route('/get-hw-availability', methods=["GET"])
 def getHWAvailability():  

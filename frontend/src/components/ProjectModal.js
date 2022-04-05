@@ -18,7 +18,6 @@ import TextField from '@mui/material/TextField';
 
 
 export default function ProjectModal(props) {
-    console.log(props)
 
     const projId = props.projId
     
@@ -38,7 +37,8 @@ export default function ProjectModal(props) {
     const  [HWSet1Avail, setHWSet1Avail] = useState(props.HWSet1Avail)
     const  [HWSet2Avail, setHWSet2Avail] = useState(props.HWSet2Avail)
 
-    console.log(checkType)
+    const  [invalidCheckout, setInvalidCheckout] = useState('')
+
 
     function updateHWSet() {
       handleHWUpdate({projId, HWSet, quantity, checkType})
@@ -53,14 +53,20 @@ export default function ProjectModal(props) {
       body:JSON.stringify(body)
       })
       const json = await response.json();
-      // error handle
-      if(json[0] == 'HWSet1'){
-        setHWSet1Avail(json[1])
-        setHw1CheckedOut(json[2])
+
+      if(json[0]){
+        if(json[1] == 'HWSet1'){
+          setHWSet1Avail(json[2])
+          setHw1CheckedOut(json[3])
+        }
+        else{
+          setHWSet2Avail(json[2])
+          setHw2CheckedOut(json[3])
+        }
+        setInvalidCheckout('')
       }
       else{
-        setHWSet2Avail(json[1])
-        setHw2CheckedOut(json[2])
+        setInvalidCheckout('Invalid check in/check out')
       }
     }
 
@@ -128,7 +134,8 @@ export default function ProjectModal(props) {
                 </Table>
             </TableContainer>
           </form>
-          <TableContainer component={Paper}>
+          <p style={{color: 'red'}}>{invalidCheckout}</p>
+          <TableContainer style={{marginTop: '15px'}} component={Paper}>
                 <Table sx={{ width: 600, maxWidth: '100%' }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
