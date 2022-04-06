@@ -87,9 +87,11 @@ export default function Register() {
                     </div>
                     <div>
                         <TextField 
-                        id="outlined-basic" 
+                        id="outlined-password-input"
                         label="Password" 
                         variant="outlined" 
+                        type="password"
+                        autoComplete="current-password"
                         onChange={(e)=>setPassword(e.target.value)}
                         style={{marginBottom: '10px'}}
                         />

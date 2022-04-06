@@ -71,9 +71,11 @@ export default function Login(props) {
                 </div>
                 <div>
                     <TextField 
-                    id="outlined-basic" 
+                    id="outlined-password-input"
+                    autoComplete="current-password"
                     label="Password" 
-                    variant="outlined" 
+                    variant="outlined"
+                    type="password" 
                     onChange={(e)=>setPassword(e.target.value)}
                     />
                 </div>
