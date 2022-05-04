@@ -1,6 +1,18 @@
 import React, { useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import ProjectModal from './ProjectModal';
 import NavbarComp2 from './NavbarComp2';
+import Grid from '@mui/material/Grid';
+import { useState } from 'react';
 import { useLocation } from "react-router-dom";
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,11 +20,38 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { Modal } from 'react-bootstrap'
 
 export default function Datasets() {
 
   const location = useLocation()
   const username = location.state[1]
+  const  [titleOne, setTitleOne] = useState('')
+  const  [titleTwo, setTitleTwo] = useState('')
+  const  [titleThree, setTitleThree] = useState('')
+  const  [titleFour, setTitleFour] = useState('')
+  const  [titleFive, setTitleFive] = useState('')
+
+
+  async function handleTitles() {
+    const response = await fetch('/get-titles',{
+      'method':'GET',
+       headers : {
+        'Content-Type':'application/json'
+       }
+    })
+    const json = await response.json();
+    setTitleOne(json[0])
+    setTitleTwo(json[1])
+    setTitleThree(json[2])
+    setTitleFour(json[3])
+    setTitleFive(json[4])
+  }
+
+  handleTitles();
+
   return (
     <div>
       <NavbarComp2 username={location.state} />
@@ -30,52 +69,52 @@ export default function Datasets() {
               </TableHead>
               <TableBody>
                 <TableRow>
-                  {/* https://physionet.org/content/adfecgdb/1.0.0/ */}
-                  <TableCell>Abdominal and Direct Fetal ECG Database</TableCell>
-                  <TableCell>Olaf Dössel et al. </TableCell>
-                  <TableCell>The research material included in the Abdominal and Direct Fetal Electrocardiogram Database contains multichannel fetal electrocardiogram (FECG) recordings obtained from 5 different women in labor, between 38 and 41 weeks of gestation. The recordings were acquired in the Department of Obstetrics at the Medical University of Silesia, by means of the KOMPOREL system for acquisition and analysis of fetal electrocardiogram (ITAM Institute, Zabrze, Poland). Each recording comprises four differential signals acquired from maternal abdomen and the reference direct fetal electrocardiogram registered from the fetal head.</TableCell>
-                  <TableCell>14.6 MB</TableCell>
-                  <TableCell><a href="https://www.physionet.org/static/published-projects/adfecgdb/abdominal-and-direct-fetal-ecg-database-1.0.0.zip">ADFECGDB.zip</a></TableCell>
+                  {/* https://physionet.org/content/aftdb/1.0.0/ */}
+                  <TableCell>{titleOne}</TableCell>
+                  <TableCell>George Moody </TableCell>
+                  <TableCell>This database of two-channel ECG recordings has been created for use in the Computers in Cardiology Challenge 2004, an open competition with the goal of developing automated methods for predicting spontaneous termination of atrial fibrillation (AF). See the challenge announcement for information about the competition. </TableCell>
+                  <TableCell>2.4 MB</TableCell>
+                  <TableCell><a href="https://www.physionet.org/static/published-projects/aftdb/af-termination-challenge-database-1.0.0.zip">aftdb.zip</a></TableCell>
                 </TableRow>
               </TableBody>
               <TableBody>
                 <TableRow>
-                  {/* https://physionet.org/content/multi-gait-posture/1.0.0/ */}
-                  <TableCell>A multi-camera and multimodal dataset for posture and gait analysis</TableCell>
-                  <TableCell>Manuel Palermo et al. </TableCell>
-                  <TableCell>Gait and posture analysis while using assisting robotic devices is of utmost importance to attain effective assistance. This work provides a multi-camera, multimodal, and detailed dataset for vision-based applications using a wheeled robotic walker equipped with a pair of affordable cameras. Depth data was acquired at 30 fps from a total of 14 healthy participants walking at 3 different gait speeds, across 3 different walking scenarios/paths at 3 different locations. Simultaneously, accurate skeleton joint data was recorded using an inertial-based commercial motion capture system that provides a reliable ground-truth for classical or novel (i.e., machine learning-based) vision-based applications. In total, the database contains approximately 166K frames of synchronized data, which amounts to 92 minutes of total recording time. This dataset may contribute to the development and evaluation of: i) classic or data-driven vision-based pose estimation algorithms; ii) applications in human detection and tracking, and movement forecasting; iii) and gait/posture metrics analysis using a rehabilitation device.</TableCell>
-                  <TableCell>19.4 GB</TableCell>
-                  <TableCell><a href="https://www.physionet.org/static/published-projects/multi-gait-posture/a-multi-camera-and-multimodal-dataset-for-posture-and-gait-analysis-1.0.0.zip">MGP.zip</a></TableCell>
+                  {/* https://physionet.org/content/but-pdb/1.0.0/ */}
+                  <TableCell>{titleTwo}</TableCell>
+                  <TableCell>Lucie Marsanova et al. </TableCell>
+                  <TableCell>Brno University of Technology ECG Signal Database with Annotations of P Wave (BUT PDB) is an ECG signal database with marked peaks of P waves created by the cardiology team at the Department of Biomedical Engineering, Brno University of Technology. The database consists of 50 2-minute 2-lead ECG signal records with various types of pathology. The ECGs were selected from three existing databases of ECG signal - the MIT-BIH Arrhythmia Database, the MIT-BIH Supraventricular Arrhythmia Database, and the Long Term AF Database. The P waves positions were manually annotated by two ECG experts in all 50 records. Each record contains also annotation of positions and types of QRS complexes (from original database) and dominant diagnosis (pathology) present in record. This database is created for the development, evaluation and objective comparison of P wave detection algorithms.</TableCell>
+                  <TableCell>4.9 MB</TableCell>
+                  <TableCell><a href="https://www.physionet.org/static/published-projects/but-pdb/brno-university-of-technology-ecg-signal-database-with-annotations-of-p-wave-but-pdb-1.0.0.zip">but-pdb.zip</a></TableCell> 
                   </TableRow>
               </TableBody>
               <TableBody>
                 <TableRow>
-                  {/* https://physionet.org/content/sleep-accel/1.0.0/ */}
-                  <TableCell>Motion and heart rate from a wrist-worn wearable and labeled sleep from polysomnography</TableCell>
-                  <TableCell>Olivia Watch et al. </TableCell>
-                  <TableCell>This project contains acceleration (in units of g) and heart rate (bpm, measured from photoplethysmography) recorded from the Apple Watch, as well as labeled sleep scored from gold-standard polysomnography. Data were collected at the University of Michigan from June 2017 to March 2019, and there are 31 subjects in total. Code to read and process these files is available on GitHub. The paper corresponding to the work is Walch et al., "Sleep stage prediction with raw acceleration and photoplethysmography heart rate data derived from a consumer wearable device", SLEEP (2019).</TableCell>
+                  {/* https://www.physionet.org/content/calcium-imaging-sleep-state/1.0.1/ */}
+                  <TableCell>{titleThree}</TableCell>
+                  <TableCell>Eric Landsness et al. </TableCell>
+                  <TableCell>A collection of wide-field calcium imaging (WFCI) sleep and wake recordings collected from twelve transgenic mice expressing GCaMP6f in excitatory neurons. Each mouse underwent a three-hour undisturbed WFCI recording session where wake, REM (rapid eye movement) sleep and NREM (non-REM) sleep was recorded. Each WFCI recording is manually scored by sleep scoring experts in 10-second epochs as wake, NREM or REM by use of adjunct EEG/EMG. The dataset contains annotated WFCI recordings, brain mask and the Paxinos atlas used for defining the brain regions. The dataset was collected as part of a study evaluating a deep learning-based automated sleep state classification method.</TableCell>
                   <TableCell>550.1  MB</TableCell>
-                  <TableCell><a href="https://www.physionet.org/static/published-projects/sleep-accel/motion-and-heart-rate-from-a-wrist-worn-wearable-and-labeled-sleep-from-polysomnography-1.0.0.zip">SLEEP.zip</a></TableCell>
+                  <TableCell><a href="https://www.physionet.org/static/published-projects/sleep-accel/motion-and-heart-rate-from-a-wrist-worn-wearable-and-labeled-sleep-from-polysomnography-1.0.0.zip">ciss.zip</a></TableCell>
                 </TableRow>
               </TableBody>
               <TableBody>
                 <TableRow>
-                  {/* https://physionet.org/content/mmash/1.0.0/ */}
-                  <TableCell>Multilevel Monitoring of Activity and Sleep in Healthy People</TableCell>
-                  <TableCell>Alessio Rossi et al. </TableCell>
-                  <TableCell>Multilevel Monitoring of Activity and Sleep in Healthy people (MMASH) dataset provides 24 hours of continuous beat-to-beat heart data, triaxial accelerometer data, sleep quality, physical activity and psychological characteristics (i.e., anxiety status, stress events and emotions) for 22 healthy participants. Moreover, saliva bio-markers (i.e.cortisol and melatonin) and activity log were also provided in this dataset. The MMASH dataset will enable researchers to test the correlations between physical activity, sleep quality, and psychological characteristics.</TableCell>
-                  <TableCell>22.7 MB</TableCell>
-                  <TableCell><a href="https://www.physionet.org/static/published-projects/mmash/multilevel-monitoring-of-activity-and-sleep-in-healthy-people-1.0.0.zip">MMASH.zip</a></TableCell>
+                  {/* https://www.physionet.org/content/cded/1.0.0/ */}
+                  <TableCell>{titleFour}</TableCell>
+                  <TableCell>Vera Novak et al. </TableCell>
+                  <TableCell>This dataset was collected as part of a prospective observational study to evaluate the effects of type 2 diabetes mellitus (DM) on cerebral vasoregulation, perfusion and functional outcomes, measured by blood flow responses to hypocapnia and hypercapnia, Valsalva maneuver, head-up tilt, and sit-to-stand test. The dataset comprises of observations from 69 diabetic and control participants (aged 55 to 75 years) with continuous measurements of cerebral blood flow using transcranial Doppler and MRI (magnetic resonance imaging), heart rate, blood pressure, and respiratory parameters, balance, walking, laboratory and retinopathy measures at baseline, and 41 subjects who completed the two-years of follow-up. Regional gray, white matter and cerebrospinal fluid volumes were quantified using a segmentation method applied on T1- and T2- weighted images and perfusion maps, using a continuous arterial spin labeling (CASL) images at 3 Tesla MRI. White matter integrity was determined from fluid attenuated inversion recovery (FLAIR) and diffusion tensor imaging (DTI) MRI. Dynamics of cerebral vasoregulation to CO2 challenge and orthostatic stress were measured using Transcranial Doppler ultrasound (TCD).</TableCell>
+                  <TableCell>2.1 GB</TableCell>
+                  <TableCell><a href="https://www.physionet.org/static/published-projects/cded/cerebromicrovascular-disease-in-elderly-with-diabetes-1.0.0.zip">cded.zip</a></TableCell>
                 </TableRow>
               </TableBody>
               <TableBody>
                 <TableRow>
-                  {/* https://physionet.org/content/simultaneous-measurements/1.0.0/ */}
-                  <TableCell>Simultaneous physiological measurements with five devices at different cognitive and physical loads</TableCell>
-                  <TableCell>Marcus Vollmer et al. </TableCell>
-                  <TableCell>This open database contains physiological measurements from 13 adult and healthy subjects during a standardized experimental setup. The physiology was examined with five different devices (NeXus-10 MKII, eMotion Faros 360°, SOMNOtouch NIBP, Hexoskin Hx1, Polar RS800 Multi), which, in contrast to other studies, were recorded simultaneously. The experiment included a five minute baseline measurement, five minute walking on the treadmill, a five minute cognitive audio test, and a five minute uphill walking on the treadmill. Measurements included electrocardiography (ECG), photoplethysmography, accelerometry, oxygen saturation, respiration, heart rate, heart rate variability, and RR intervals sampled between 1 Hz and 8000 Hz. The dataset was originally generated during an investigation of functionality, accuracy, and usability of several ECG-measurement devices. This resource included the complete raw data files (EDF and HRM) and merged data with a manual expert annotation of heart beats and annotation files with information about the beginning of each experimental phase.</TableCell>
+                  {/* https://physionet.org/content/chbmit/1.0.0/ */}
+                  <TableCell>{titleFive}</TableCell>
+                  <TableCell>Shoeb, Ali Hossam et al. </TableCell>
+                  <TableCell>This database, collected at the Children's Hospital Boston, consists of EEG recordings from pediatric subjects with intractable seizures. Subjects were monitored for up to several days following withdrawal of anti-seizure medication in order to characterize their seizures and assess their candidacy for surgical intervention.</TableCell>
                   <TableCell>777.0 MB</TableCell>
-                  <TableCell><a href="https://www.physionet.org/static/published-projects/simultaneous-measurements/simultaneous-physiological-measurements-with-five-devices-at-different-cognitive-and-physical-loads-1.0.0.zip">SIMMEASURE.zip</a></TableCell>
+                  <TableCell><a href="https://www.physionet.org/static/published-projects/simultaneous-measurements/simultaneous-physiological-measurements-with-five-devices-at-different-cognitive-and-physical-loads-1.0.0.zip">chbmit.zip</a></TableCell>
                 </TableRow>
               </TableBody>
         </Table>

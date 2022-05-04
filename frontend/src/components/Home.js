@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 
 export default function Home() {
     const history = useHistory();
+    // onclick forces render of a route
     const navigateLogIn = () => history.push('/login')
     const navigateRegister = () => history.push('/register')
 

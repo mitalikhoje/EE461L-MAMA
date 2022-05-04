@@ -16,6 +16,7 @@ import {
 
 const Routers = () => {
   return (
+    // routes paths to components
     <Router>
      <div>
       <Route exact path="/">

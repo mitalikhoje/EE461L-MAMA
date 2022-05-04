@@ -1,21 +1,27 @@
-
 from flask import Flask, redirect, request, url_for, jsonify
 from matplotlib.style import use
-from flask.helpers import send_from_directory
 from pymongo import MongoClient
 from flask_cors import CORS, cross_origin
 import json
 from bson import json_util
 
-app = Flask(__name__, static_folder='frontend/build', static_url_path='')
+import wfdb
+import os
+import zipfile
+
+app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+metadata = wfdb.get_dbs()
 
+# replace w/ real mongodb url
 mongoClient = MongoClient('mongodb+srv://mkhoje:MAMA101@cluster0.rpy4x.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 db = mongoClient['projectMAMA']
 usersCol = db['users'] # users collection
 hwCol = db['hardware'] # hardware collection
 projectsCol = db['projects'] # projects collections
+
+CORS(app)
 
 def customEncrypt(inputText, N, D):
     inputText = inputText[::-1]
@@ -29,12 +35,7 @@ def customEncrypt(inputText, N, D):
 
     return encryptedText
 
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
-
 @app.route('/add-user', methods=["POST"])
-@cross_origin()
 def addUser():
     app.logger.info(request.json)
     fName = request.json['fName']
@@ -59,7 +60,6 @@ def addUser():
         return jsonify(1)
 
 @app.route('/validate-account', methods=["POST"])
-@cross_origin()
 def validateUser():
     app.logger.info(request.json)
     username = request.json['username']
@@ -86,7 +86,6 @@ def validateUser():
         return jsonify(0)
 
 @app.route('/add-project', methods=["POST"])
-@cross_origin()
 def addProject():
     app.logger.info(request.json)
     projName = request.json['projName']
@@ -104,7 +103,6 @@ def addProject():
     return ('', 204)
 
 @app.route('/add-existing-project', methods=["POST"])
-@cross_origin()
 def addExistingProject():
     app.logger.info(request.json)
     username = request.json['username']
@@ -123,7 +121,6 @@ def addExistingProject():
     return jsonify(projects)
 
 @app.route('/get-HW1-checked-out', methods=["POST"])
-@cross_origin()
 def getHW1CheckedOut():
     app.logger.info(request.json)
     projId = request.json
@@ -136,7 +133,6 @@ def getHW1CheckedOut():
     return jsonify(hw1CheckedOut)
 
 @app.route('/get-HW2-checked-out', methods=["POST"])
-@cross_origin()
 def getHW2CheckedOut():
     app.logger.info(request.json)
     projId = request.json
@@ -149,7 +145,6 @@ def getHW2CheckedOut():
     return jsonify(hw1CheckedOut)
 
 @app.route('/update-hw-set', methods=["POST"])
-@cross_origin()
 def updateHWSet():
     app.logger.info(request.json)
     projId = request.json['projId']
@@ -193,7 +188,6 @@ def updateHWSet():
         return jsonify(1, hwSet, available, checked_out)
 
 @app.route('/get-hw-availability', methods=["GET"])
-@cross_origin()
 def getHWAvailability():  
     hw1doc = hwCol.find_one({'name': 'HWSet1'})
     hw1Available = hw1doc['available']
@@ -204,7 +198,6 @@ def getHWAvailability():
     return jsonify(hw1Available, hw2Available)
 
 @app.route('/get-projects-info', methods=["POST"])
-@cross_origin()
 def getProjectsInfo():
     app.logger.info(request.json)
     username = request.json['username']
@@ -220,6 +213,10 @@ def getProjectsInfo():
          hwSet1['capacity'], hwSet2['capacity']
     )
 
+@app.route('/get-titles', methods=["GET"])
+def getTitles():
+    return jsonify(metadata[5][1], metadata[17][1], metadata[20][1], metadata[25][1], metadata[30][1])
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
